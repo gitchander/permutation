@@ -39,23 +39,23 @@ func factorial(x int) int {
 func testIntSlice(t *testing.T, as []int) {
 
 	i := 0
-	var vs []interface{}
 
-	fn := func(_ interface{}) bool {
+	var vs [][]int
 
+	p := New(IntSlice(as))
+
+	for {
 		for j, v := range vs {
-			bs := v.([]int)
-			if reflect.DeepEqual(as, bs) {
+			if reflect.DeepEqual(as, v) {
 				t.Fatalf("v(%d) == v(%d)", j, i)
 			}
 		}
 		i++
 		vs = append(vs, cloneIntSlice(as))
-		return true
-	}
 
-	if err := Trace(as, fn); err != nil {
-		t.Fatal(err.Error())
+		if !p.Next() {
+			break
+		}
 	}
 
 	if n := factorial(len(as)); i != n {

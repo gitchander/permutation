@@ -32,10 +32,11 @@ func useVariants() {
 
 func useExample1(v interface{}) {
 
-	p, err := permutation.New(v)
+	data, err := permutation.NewAnySlice(v)
 	if err != nil {
 		log.Fatal(err)
 	}
+	p := permutation.New(data)
 
 	fmt.Println(v)
 	for p.Next() {
@@ -45,10 +46,7 @@ func useExample1(v interface{}) {
 
 func useExample2(v interface{}) {
 
-	p, err := permutation.New(v)
-	if err != nil {
-		log.Fatal(err)
-	}
+	p := permutation.New(permutation.MustAnySlice(v))
 
 	for {
 		fmt.Println(v)
@@ -60,10 +58,7 @@ func useExample2(v interface{}) {
 
 func useExample3(v interface{}) {
 
-	p, err := permutation.New(v)
-	if err != nil {
-		log.Fatal(err)
-	}
+	p := permutation.New(permutation.MustAnySlice(v))
 
 	for ok := true; ok; ok = p.Next() {
 		fmt.Println(v)
@@ -80,20 +75,8 @@ func exampleTrace() {
 	}
 
 	for _, v := range vs {
-		traceValue(v)
+		useExample3(v)
 		fmt.Println()
-	}
-}
-
-func traceValue(v interface{}) {
-	err := permutation.Trace(v,
-		func(w interface{}) bool {
-			fmt.Println(w)
-			return true
-		},
-	)
-	if err != nil {
-		log.Fatal(err.Error())
 	}
 }
 
@@ -104,16 +87,13 @@ func exampleFactorial() {
 }
 
 func factorial(n int) int {
-	a := make([]struct{}, n)
 	i := 0
-	err := permutation.Trace(a,
-		func(_ interface{}) bool {
-			i++
-			return true
-		},
-	)
-	if err != nil {
-		log.Fatal(err.Error())
+	p := permutation.New(permutation.EmptySlice(n))
+	for {
+		i++
+		if !p.Next() {
+			break
+		}
 	}
 	return i
 }
