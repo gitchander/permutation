@@ -6,7 +6,7 @@ Simple permutation package for golang
 go get github.com/gitchander/permutation
 ```
 
-##Examples
+##Usage
 
 ####permutations of int slice:
 ```go
@@ -30,13 +30,70 @@ func main() {
 }
 ```
 result:
-```bash
+```
 [1 2 3]
 [2 1 3]
 [3 1 2]
 [1 3 2]
 [2 3 1]
 [3 2 1]
+```
+
+####permutation of slice with any elements:
+```go
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/gitchander/permutation"
+)
+
+func main() {
+
+	a := []interface{}{true, -5, "one"}
+
+	data, err := permutation.NewAnySlice(a)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	p := permutation.New(data)
+
+	for ok := true; ok; ok = p.Next() {
+		fmt.Println(a)
+	}
+}
+```
+or shorter:
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/gitchander/permutation"
+)
+
+func main() {
+	var (
+		a = []interface{}{true, -5, "one"}
+		p = permutation.New(permutation.MustAnySlice(a))
+	)
+	for ok := true; ok; ok = p.Next() {
+		fmt.Println(a)
+	}
+}
+```
+result:
+```
+[true -5 one]
+[-5 true one]
+[one true -5]
+[true one -5]
+[-5 one true]
+[one -5 true]
 ```
 
 ####variants for trace permutations:
