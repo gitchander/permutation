@@ -66,7 +66,7 @@ func main() {
 	}
 }
 ```
-or shorter:
+or use MustAnySlice (panic if error):
 ```go
 package main
 
@@ -141,4 +141,49 @@ func trace3(p *permutation.Permutation, fn func()) {
 		fn()
 	}
 }
+```
+
+####usage permutation.Interface
+```go
+package main
+
+import (
+	"fmt"
+	"image"
+
+	"github.com/gitchander/permutation"
+)
+
+type PointSlice []image.Point
+
+func (ps PointSlice) Len() int {
+	return len(ps)
+}
+func (ps PointSlice) Swap(i, j int) {
+	ps[i], ps[j] = ps[j], ps[i]
+}
+
+func main() {
+
+	ps := []image.Point{
+		{1, 27},
+		{-4, 0},
+		{5, 12},
+	}
+
+	p := permutation.New(PointSlice(ps))
+
+	for ok := true; ok; ok = p.Next() {
+		fmt.Println(ps)
+	}
+}
+```
+result:
+```
+[(1,27) (-4,0) (5,12)]
+[(-4,0) (1,27) (5,12)]
+[(5,12) (1,27) (-4,0)]
+[(1,27) (5,12) (-4,0)]
+[(-4,0) (5,12) (1,27)]
+[(5,12) (-4,0) (1,27)]
 ```
