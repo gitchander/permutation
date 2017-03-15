@@ -1,14 +1,14 @@
-#permutation
+# permutation
 Simple permutation package for golang
 
-##Install
+## Install
 ```bash
 go get github.com/gitchander/permutation
 ```
 
-##Usage
+## Usage
 
-####permutations of int slice:
+#### permutations of int slice:
 ```go
 package main
 
@@ -39,7 +39,7 @@ result:
 [3 2 1]
 ```
 
-####permutation of slice with any elements:
+#### permutation of slice with any elements:
 ```go
 package main
 
@@ -96,7 +96,7 @@ result:
 [one -5 true]
 ```
 
-####variants for trace permutations:
+#### variants for trace permutations:
 ```go
 package main
 
@@ -143,7 +143,7 @@ func trace3(p *permutation.Permutation, fn func()) {
 }
 ```
 
-####usage permutation.Interface
+#### usage permutation.Interface
 ```go
 package main
 
