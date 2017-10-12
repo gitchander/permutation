@@ -5,11 +5,6 @@ import (
 	"reflect"
 )
 
-type EmptySlice int
-
-func (p EmptySlice) Len() int    { return int(p) }
-func (EmptySlice) Swap(i, j int) {}
-
 type IntSlice []int
 
 func (p IntSlice) Len() int      { return len(p) }

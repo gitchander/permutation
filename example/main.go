@@ -8,92 +8,108 @@ import (
 )
 
 func main() {
-	useVariants()
-	exampleTrace()
-	exampleFactorial()
+	exampleIntSlice()
+	exampleStringSlice()
+	exampleAnySlice()
+	exampleMustAnySlice()
+	exampleEmptySlice()
+	exampleInterface()
+	exampleBadFactorial()
 }
 
-func useVariants() {
-
-	vs := []interface{}{true, -5, "str"}
-
-	fmt.Println("use variant 1:")
-	useExample1(vs)
-	fmt.Println()
-
-	fmt.Println("use variant 2:")
-	useExample2(vs)
-	fmt.Println()
-
-	fmt.Println("use variant 3:")
-	useExample3(vs)
+func exampleIntSlice() {
+	a := []int{1, 2, 3}
+	p := permutation.New(permutation.IntSlice(a))
+	for p.Scan() {
+		fmt.Println(a)
+	}
 	fmt.Println()
 }
 
-func useExample1(v interface{}) {
+func exampleStringSlice() {
+	a := []string{"alpha", "beta", "gamma"}
+	p := permutation.New(permutation.StringSlice(a))
+	for p.Scan() {
+		fmt.Println(a)
+	}
+	fmt.Println()
+}
 
-	data, err := permutation.NewAnySlice(v)
+func exampleAnySlice() {
+
+	a := []interface{}{-1, "control", 9.3}
+
+	data, err := permutation.NewAnySlice(a)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	p := permutation.New(data)
-
-	fmt.Println(v)
-	for p.Next() {
-		fmt.Println(v)
+	for p.Scan() {
+		fmt.Println(a)
 	}
+	fmt.Println()
 }
 
-func useExample2(v interface{}) {
-
-	p := permutation.New(permutation.MustAnySlice(v))
-
-	for {
-		fmt.Println(v)
-		if !p.Next() {
-			break
-		}
+func exampleMustAnySlice() {
+	a := []int{1, 2}
+	p := permutation.New(permutation.MustAnySlice(a))
+	for p.Scan() {
+		fmt.Println(a)
 	}
+	fmt.Println()
 }
 
-func useExample3(v interface{}) {
-
-	p := permutation.New(permutation.MustAnySlice(v))
-
-	for ok := true; ok; ok = p.Next() {
-		fmt.Println(v)
+func exampleEmptySlice() {
+	a := []interface{}{}
+	p := permutation.New(permutation.MustAnySlice(a))
+	for p.Scan() {
+		fmt.Println(a)
 	}
+	fmt.Println()
 }
 
-func exampleTrace() {
-
-	vs := []interface{}{
-		[]int{},
-		[]bool{true, false},
-		[]int{1, 2, 3},
-		[]string{"one", "two", "three", "four"},
-	}
-
-	for _, v := range vs {
-		useExample3(v)
-		fmt.Println()
-	}
+type Person struct {
+	Name string
+	Age  int
 }
 
-func exampleFactorial() {
+type PersonSlice []Person
+
+func (ps PersonSlice) Len() int      { return len(ps) }
+func (ps PersonSlice) Swap(i, j int) { ps[i], ps[j] = ps[j], ps[i] }
+
+func exampleInterface() {
+	a := []Person{
+		{Name: "one", Age: 1},
+		{Name: "two", Age: 2},
+		{Name: "three", Age: 3},
+	}
+	p := permutation.New(PersonSlice(a))
+	for p.Scan() {
+		fmt.Println(a)
+	}
+	fmt.Println()
+}
+
+func exampleBadFactorial() {
 	for i := 0; i < 10; i++ {
 		fmt.Printf("%d! = %d\n", i, factorial(i))
 	}
 }
 
-func factorial(n int) int {
-	i := 0
-	p := permutation.New(permutation.EmptySlice(n))
-	for {
-		i++
-		if !p.Next() {
-			break
-		}
+func factorial(n int) (val int) {
+	if n < 0 {
+		return -1
 	}
-	return i
+	p := permutation.New(emptiesSlice(n))
+	for p.Scan() {
+		val++
+	}
+	return
 }
+
+type emptiesSlice int
+
+func (p emptiesSlice) Len() int    { return int(p) }
+func (emptiesSlice) Swap(i, j int) {}

@@ -21,11 +21,8 @@ import (
 func main() {
 	a := []int{1, 2, 3}
 	p := permutation.New(permutation.IntSlice(a))
-	for {
+	for p.Scan() {
 		fmt.Println(a)
-		if !p.Next() {
-			break
-		}
 	}
 }
 ```
@@ -39,34 +36,7 @@ result:
 [3 2 1]
 ```
 
-#### permutation of slice with any elements:
-```go
-package main
-
-import (
-	"fmt"
-	"log"
-
-	"github.com/gitchander/permutation"
-)
-
-func main() {
-
-	a := []interface{}{true, -5, "one"}
-
-	data, err := permutation.NewAnySlice(a)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	p := permutation.New(data)
-
-	for ok := true; ok; ok = p.Next() {
-		fmt.Println(a)
-	}
-}
-```
-or use MustAnySlice (panic if error):
+#### permutations of string slice:
 ```go
 package main
 
@@ -77,69 +47,43 @@ import (
 )
 
 func main() {
-	var (
-		a = []interface{}{true, -5, "one"}
-		p = permutation.New(permutation.MustAnySlice(a))
-	)
-	for ok := true; ok; ok = p.Next() {
+	a := []string{"alpha", "beta", "gamma"}
+	p := permutation.New(permutation.StringSlice(a))
+	for p.Scan() {
 		fmt.Println(a)
 	}
 }
 ```
 result:
 ```
-[true -5 one]
-[-5 true one]
-[one true -5]
-[true one -5]
-[-5 one true]
-[one -5 true]
+[alpha beta gamma]
+[beta alpha gamma]
+[gamma alpha beta]
+[alpha gamma beta]
+[beta gamma alpha]
+[gamma beta alpha]
 ```
 
-#### variants for trace permutations:
+#### permutation use of AnySlice:
 ```go
-package main
+a := []interface{}{-1, "control", 9.3}
 
-import (
-	"fmt"
-
-	"github.com/gitchander/permutation"
-)
-
-func main() {
-	a := []string{"a", "b", "c"}
-	fn := func() { fmt.Println(a) }
-
-	trace1(permutation.New(permutation.StringSlice(a)), fn)
-	fmt.Println()
-
-	trace2(permutation.New(permutation.StringSlice(a)), fn)
-	fmt.Println()
-
-	trace3(permutation.New(permutation.StringSlice(a)), fn)
-	fmt.Println()
+data, err := permutation.NewAnySlice(a)
+if err != nil {
+	log.Fatal(err)
 }
 
-func trace1(p *permutation.Permutation, fn func()) {
-	fn()
-	for p.Next() {
-		fn()
-	}
+p := permutation.New(data)
+for p.Scan() {
+	fmt.Println(a)
 }
-
-func trace2(p *permutation.Permutation, fn func()) {
-	for {
-		fn()
-		if !p.Next() {
-			break
-		}
-	}
-}
-
-func trace3(p *permutation.Permutation, fn func()) {
-	for ok := true; ok; ok = p.Next() {
-		fn()
-	}
+```
+or use MustAnySlice (panic if error):
+```go
+a := []int{1, 2}
+p := permutation.New(permutation.MustAnySlice(a))
+for p.Scan() {
+	fmt.Println(a)
 }
 ```
 
@@ -149,41 +93,38 @@ package main
 
 import (
 	"fmt"
-	"image"
 
 	"github.com/gitchander/permutation"
 )
 
-type PointSlice []image.Point
+type Person struct {
+	Name string
+	Age  int
+}
 
-func (ps PointSlice) Len() int {
-	return len(ps)
-}
-func (ps PointSlice) Swap(i, j int) {
-	ps[i], ps[j] = ps[j], ps[i]
-}
+type PersonSlice []Person
+
+func (ps PersonSlice) Len() int      { return len(ps) }
+func (ps PersonSlice) Swap(i, j int) { ps[i], ps[j] = ps[j], ps[i] }
 
 func main() {
-
-	ps := []image.Point{
-		{1, 27},
-		{-4, 0},
-		{5, 12},
+	a := []Person{
+		{Name: "one", Age: 1},
+		{Name: "two", Age: 2},
+		{Name: "three", Age: 3},
 	}
-
-	p := permutation.New(PointSlice(ps))
-
-	for ok := true; ok; ok = p.Next() {
-		fmt.Println(ps)
+	p := permutation.New(PersonSlice(a))
+	for p.Scan() {
+		fmt.Println(a)
 	}
 }
 ```
 result:
 ```
-[(1,27) (-4,0) (5,12)]
-[(-4,0) (1,27) (5,12)]
-[(5,12) (1,27) (-4,0)]
-[(1,27) (5,12) (-4,0)]
-[(-4,0) (5,12) (1,27)]
-[(5,12) (-4,0) (1,27)]
+[{one 1} {two 2} {three 3}]
+[{two 2} {one 1} {three 3}]
+[{three 3} {one 1} {two 2}]
+[{one 1} {three 3} {two 2}]
+[{two 2} {three 3} {one 1}]
+[{three 3} {two 2} {one 1}]
 ```

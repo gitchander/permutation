@@ -43,8 +43,7 @@ func testIntSlice(t *testing.T, as []int) {
 	var vs [][]int
 
 	p := New(IntSlice(as))
-
-	for {
+	for p.Scan() {
 		for j, v := range vs {
 			if reflect.DeepEqual(as, v) {
 				t.Fatalf("v(%d) == v(%d)", j, i)
@@ -52,10 +51,6 @@ func testIntSlice(t *testing.T, as []int) {
 		}
 		i++
 		vs = append(vs, cloneIntSlice(as))
-
-		if !p.Next() {
-			break
-		}
 	}
 
 	if n := factorial(len(as)); i != n {

@@ -8,18 +8,41 @@ type Interface interface {
 }
 
 type Permutation struct {
-	data Interface
-	b    []int
+	pr    *permutator
+	first bool
 }
 
 func New(data Interface) *Permutation {
 	return &Permutation{
+		pr:    newPermutator(data),
+		first: true,
+	}
+}
+
+func (p *Permutation) Scan() bool {
+	if p.pr == nil {
+		return false
+	}
+	if p.first {
+		p.first = false
+		return true
+	}
+	return p.pr.Next()
+}
+
+type permutator struct {
+	data Interface
+	b    []int
+}
+
+func newPermutator(data Interface) *permutator {
+	return &permutator{
 		data: data,
 		b:    make([]int, data.Len()),
 	}
 }
 
-func (p *Permutation) Next() bool {
+func (p *permutator) Next() bool {
 	if p.data != nil {
 		if next(p.data, p.b) {
 			return true
