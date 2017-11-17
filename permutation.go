@@ -7,72 +7,67 @@ type Interface interface {
 	Swap(i, j int)
 }
 
-type Permutation struct {
-	pr    *permutator
+type Scanner struct {
+	p     *permutator
 	first bool
 }
 
-func New(data Interface) *Permutation {
-	return &Permutation{
-		pr:    newPermutator(data),
+func New(v Interface) *Scanner {
+	return &Scanner{
+		p:     newPermutator(v),
 		first: true,
 	}
 }
 
-func (p *Permutation) Scan() bool {
-	if p.pr == nil {
-		return false
-	}
-	if p.first {
-		p.first = false
+func (s *Scanner) Scan() bool {
+	if s.first {
+		s.first = false
 		return true
 	}
-	return p.pr.Next()
+	if s.p.Next() {
+		return true
+	}
+	s.first = true // for next scanning
+	return false
 }
 
 type permutator struct {
-	data Interface
-	b    []int
+	v Interface
+	b []int
 }
 
-func newPermutator(data Interface) *permutator {
+func newPermutator(v Interface) *permutator {
 	return &permutator{
-		data: data,
-		b:    make([]int, data.Len()),
+		v: v,
+		b: make([]int, v.Len()),
 	}
 }
 
 func (p *permutator) Next() bool {
-	if p.data != nil {
-		if next(p.data, p.b) {
-			return true
-		}
-		p.data = nil
-		p.b = nil
+	n := flipNumber(p.b)
+	if n <= len(p.b) {
+		flip(p.v, n)
+		return true
 	}
+	flip(p.v, len(p.b)) // for return to begin state
 	return false
 }
 
-func next(data Interface, b []int) bool {
+func flipNumber(b []int) int {
 	for i := range b {
 		b[i]++
 		if b[i] < i+2 {
-			if i < len(b)-1 {
-				flip(data, i+2)
-				return true
-			}
-			flip(data, len(b)) // for return to begin state
-			return false
+			return i + 2
 		}
 		b[i] = 0
 	}
-	return false
+	return len(b) + 1
 }
 
-func flip(data Interface, n int) {
+func flip(v Interface, n int) {
 	i, j := 0, n-1
 	for i < j {
-		data.Swap(i, j)
+		v.Swap(i, j)
 		i, j = i+1, j-1
 	}
 }
