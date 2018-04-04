@@ -7,43 +7,19 @@ type Interface interface {
 	Swap(i, j int)
 }
 
-type Scanner struct {
-	p     *permutator
-	first bool
-}
-
-func New(v Interface) *Scanner {
-	return &Scanner{
-		p:     newPermutator(v),
-		first: true,
-	}
-}
-
-func (s *Scanner) Scan() bool {
-	if s.first {
-		s.first = false
-		return true
-	}
-	if s.p.Next() {
-		return true
-	}
-	s.first = true // for next scanning
-	return false
-}
-
-type permutator struct {
+type Permutator struct {
 	v Interface
 	b []int
 }
 
-func newPermutator(v Interface) *permutator {
-	return &permutator{
+func New(v Interface) *Permutator {
+	return &Permutator{
 		v: v,
 		b: make([]int, v.Len()),
 	}
 }
 
-func (p *permutator) Next() bool {
+func (p *Permutator) Next() bool {
 	n := flipNumber(p.b)
 	if n <= len(p.b) {
 		flip(p.v, n)

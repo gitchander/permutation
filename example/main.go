@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gitchander/permutation"
+	prmt "github.com/gitchander/permutation"
 )
 
 func main() {
@@ -15,12 +15,15 @@ func main() {
 	exampleEmptySlice()
 	exampleInterface()
 	exampleBadFactorial()
+	exampleRepeat()
+	exampleCombinations()
+	exampleWalk()
 }
 
 func exampleIntSlice() {
 	a := []int{1, 2, 3}
-	p := permutation.New(permutation.IntSlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.IntSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -28,8 +31,8 @@ func exampleIntSlice() {
 
 func exampleStringSlice() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := permutation.New(permutation.StringSlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.StringSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -39,13 +42,13 @@ func exampleAnySlice() {
 
 	a := []interface{}{-1, "control", 9.3}
 
-	data, err := permutation.NewAnySlice(a)
+	data, err := prmt.NewAnySlice(a)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	p := permutation.New(data)
-	for p.Scan() {
+	p := prmt.New(data)
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -53,8 +56,8 @@ func exampleAnySlice() {
 
 func exampleMustAnySlice() {
 	a := []int{1, 2}
-	p := permutation.New(permutation.MustAnySlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.MustAnySlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -62,8 +65,8 @@ func exampleMustAnySlice() {
 
 func exampleEmptySlice() {
 	a := []interface{}{}
-	p := permutation.New(permutation.MustAnySlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.MustAnySlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -85,8 +88,8 @@ func exampleInterface() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := permutation.New(PersonSlice(a))
-	for p.Scan() {
+	p := prmt.New(PersonSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -102,8 +105,8 @@ func factorial(n int) (val int) {
 	if n < 0 {
 		return -1
 	}
-	p := permutation.New(emptiesSlice(n))
-	for p.Scan() {
+	p := prmt.New(emptiesSlice(n))
+	for ok := true; ok; ok = p.Next() {
 		val++
 	}
 	return
@@ -113,3 +116,72 @@ type emptiesSlice int
 
 func (p emptiesSlice) Len() int    { return int(p) }
 func (emptiesSlice) Swap(i, j int) {}
+
+func exampleRepeat() {
+	a := []int{1, 2, 3}
+
+	p := prmt.New(prmt.IntSlice(a))
+
+	for ok := true; ok; ok = p.Next() {
+		fmt.Println(a)
+	}
+	fmt.Println()
+
+	// repeate
+	for ok := true; ok; ok = p.Next() {
+		fmt.Println(a)
+	}
+	fmt.Println()
+}
+
+func exampleCombinations() {
+
+	var (
+		vs = []string{"1", "2", "3", "4"}
+		n  = len(vs)
+
+		ds = make([]string, 3)
+		k  = len(ds)
+	)
+
+	as := make([]int, k)
+	for i := range as {
+		as[i] = i
+	}
+
+	p := prmt.New(prmt.IntSlice(as))
+	for {
+		//fmt.Println(as)
+		for ok := true; ok; ok = p.Next() {
+			for i, a := range as {
+				ds[i] = vs[a]
+			}
+			fmt.Println(ds)
+		}
+		overflow := nextComb(as, n)
+		if overflow {
+			break
+		}
+	}
+	fmt.Println()
+}
+
+func nextComb(as []int, n int) (overflow bool) {
+	if (len(as) == 1) || nextComb(as[1:], n) {
+		d := as[0] + 1
+		if d > (n - len(as)) {
+			return true
+		}
+		for i := range as {
+			as[i] = d + i
+		}
+	}
+	return false
+}
+
+func exampleWalk() {
+	var a = []string{"A", "B", "C"}
+	prmt.Walk(a, func() {
+		fmt.Println(a)
+	})
+}

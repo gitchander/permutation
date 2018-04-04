@@ -43,7 +43,7 @@ func testIntSlice(t *testing.T, as []int) {
 	var vs [][]int
 
 	p := New(IntSlice(as))
-	for p.Scan() {
+	for ok := true; ok; ok = p.Next() {
 		for j, v := range vs {
 			if reflect.DeepEqual(as, v) {
 				t.Fatalf("v(%d) == v(%d)", j, i)

@@ -142,6 +142,7 @@ fs - flip size
 
 
 Author: Manuilov Yaroslav (Chander)
+Email:  jpochander@gmail.com
 
      _   _
     / | / 
