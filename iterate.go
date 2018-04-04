@@ -9,24 +9,29 @@ func Walk(v interface{}, f func()) {
 
 	p := New(i)
 
-	//------------------------------------------
-	// Variant: 1
+	iterate_V1(p, f)
+	//	iterate_V2(p, f)
+	//	iterate_V3(p, f)
+}
+
+func iterate_V1(p *Permutator, f func()) {
 	f()
 	for p.Next() {
 		f()
 	}
-	//------------------------------------------
-	// Variant: 2
-	//	for {
-	//		f()
-	//		if !p.Next() {
-	//			break
-	//		}
-	//	}
-	//------------------------------------------
-	// Variant: 3
-	//	for ok := true; ok; ok = p.Next() {
-	//		f()
-	//	}
-	//------------------------------------------
+}
+
+func iterate_V2(p *Permutator, f func()) {
+	for {
+		f()
+		if !p.Next() {
+			break
+		}
+	}
+}
+
+func iterate_V3(p *Permutator, f func()) {
+	for ok := true; ok; ok = p.Next() {
+		f()
+	}
 }

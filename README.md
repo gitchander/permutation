@@ -15,13 +15,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/gitchander/permutation"
+	prmt "github.com/gitchander/permutation"
 )
 
 func main() {
 	a := []int{1, 2, 3}
-	p := permutation.New(permutation.IntSlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.IntSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 }
@@ -43,13 +43,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/gitchander/permutation"
+	prmt "github.com/gitchander/permutation"
 )
 
 func main() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := permutation.New(permutation.StringSlice(a))
-	for p.Scan() {
+	p := prmt.New(prmt.StringSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 }
@@ -68,21 +68,21 @@ result:
 ```go
 a := []interface{}{-1, "control", 9.3}
 
-data, err := permutation.NewAnySlice(a)
+data, err := prmt.NewAnySlice(a)
 if err != nil {
 	log.Fatal(err)
 }
 
-p := permutation.New(data)
-for p.Scan() {
+p := prmt.New(data)
+for ok := true; ok; ok = p.Next() {
 	fmt.Println(a)
 }
 ```
 or use MustAnySlice (panic if error):
 ```go
 a := []int{1, 2}
-p := permutation.New(permutation.MustAnySlice(a))
-for p.Scan() {
+p := prmt.New(prmt.MustAnySlice(a))
+for ok := true; ok; ok = p.Next() {
 	fmt.Println(a)
 }
 ```
@@ -94,7 +94,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gitchander/permutation"
+	prmt "github.com/gitchander/permutation"
 )
 
 type Person struct {
@@ -113,8 +113,8 @@ func main() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := permutation.New(PersonSlice(a))
-	for p.Scan() {
+	p := prmt.New(PersonSlice(a))
+	for ok := true; ok; ok = p.Next() {
 		fmt.Println(a)
 	}
 }
