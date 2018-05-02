@@ -1,6 +1,8 @@
 package permutation
 
-func Walk(v interface{}, f func()) {
+// Iterate all permutation for v.
+// If f returns false, Walk stops the iteration.
+func Walk(v interface{}, f func() bool) {
 
 	i, ok := v.(Interface)
 	if !ok {
@@ -14,24 +16,32 @@ func Walk(v interface{}, f func()) {
 	//	iterate_V3(p, f)
 }
 
-func iterate_V1(p *Permutator, f func()) {
-	f()
+func iterate_V1(p *Permutator, f func() bool) {
+	if !f() {
+		return
+	}
 	for p.Next() {
-		f()
+		if !f() {
+			return
+		}
 	}
 }
 
-func iterate_V2(p *Permutator, f func()) {
+func iterate_V2(p *Permutator, f func() bool) {
 	for {
-		f()
+		if !f() {
+			return
+		}
 		if !p.Next() {
 			break
 		}
 	}
 }
 
-func iterate_V3(p *Permutator, f func()) {
+func iterate_V3(p *Permutator, f func() bool) {
 	for ok := true; ok; ok = p.Next() {
-		f()
+		if !f() {
+			return
+		}
 	}
 }

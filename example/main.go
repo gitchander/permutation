@@ -181,7 +181,9 @@ func nextComb(as []int, n int) (overflow bool) {
 
 func exampleWalk() {
 	var a = []string{"A", "B", "C"}
-	prmt.Walk(a, func() {
-		fmt.Println(a)
-	})
+	prmt.Walk(a,
+		func() bool {
+			fmt.Println(a)
+			return true
+		})
 }
