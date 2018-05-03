@@ -8,28 +8,43 @@ type Interface interface {
 }
 
 type Permutator struct {
-	v Interface
-	b []int
+	isFirst bool // It is first state of elements
+	v       Interface
+	b       []int
 }
 
 func New(v Interface) *Permutator {
 	return &Permutator{
-		v: v,
-		b: make([]int, v.Len()),
+		isFirst: true,
+		v:       v,
+		b:       make([]int, v.Len()),
 	}
 }
 
 func (p *Permutator) Next() bool {
-	n := flipNumber(p.b)
-	if n <= len(p.b) {
-		flip(p.v, n)
+
+	if p.isFirst {
+		p.isFirst = false
 		return true
 	}
-	flip(p.v, len(p.b)) // for return to begin state
-	return false
+
+	n := flipSize(p.b)
+
+	if k := p.v.Len(); n > k {
+
+		// It is last flip. It helps to return in begin state.
+		flip(p.v, k)
+		p.isFirst = true
+
+		return false // End of permutations
+	}
+
+	flip(p.v, n) // It is the main flip.
+
+	return true
 }
 
-func flipNumber(b []int) int {
+func flipSize(b []int) int {
 	for i := range b {
 		b[i]++
 		if b[i] < i+2 {
@@ -40,6 +55,7 @@ func flipNumber(b []int) int {
 	return len(b) + 1
 }
 
+// flip is a function for make flip first n elements in slice (v)
 func flip(v Interface, n int) {
 	i, j := 0, n-1
 	for i < j {

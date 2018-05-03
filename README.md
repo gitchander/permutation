@@ -21,7 +21,7 @@ import (
 func main() {
 	a := []int{1, 2, 3}
 	p := prmt.New(prmt.IntSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 }
@@ -49,7 +49,7 @@ import (
 func main() {
 	a := []string{"alpha", "beta", "gamma"}
 	p := prmt.New(prmt.StringSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 }
@@ -74,7 +74,7 @@ if err != nil {
 }
 
 p := prmt.New(data)
-for ok := true; ok; ok = p.Next() {
+for p.Next() {
 	fmt.Println(a)
 }
 ```
@@ -82,7 +82,7 @@ or use MustAnySlice (panic if error):
 ```go
 a := []int{1, 2}
 p := prmt.New(prmt.MustAnySlice(a))
-for ok := true; ok; ok = p.Next() {
+for p.Next() {
 	fmt.Println(a)
 }
 ```
@@ -114,7 +114,7 @@ func main() {
 		{Name: "three", Age: 3},
 	}
 	p := prmt.New(PersonSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 }

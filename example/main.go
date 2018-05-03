@@ -17,13 +17,12 @@ func main() {
 	exampleBadFactorial()
 	exampleRepeat()
 	exampleCombinations()
-	exampleWalk()
 }
 
 func exampleIntSlice() {
 	a := []int{1, 2, 3}
 	p := prmt.New(prmt.IntSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -32,7 +31,7 @@ func exampleIntSlice() {
 func exampleStringSlice() {
 	a := []string{"alpha", "beta", "gamma"}
 	p := prmt.New(prmt.StringSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -48,7 +47,7 @@ func exampleAnySlice() {
 	}
 
 	p := prmt.New(data)
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -57,16 +56,16 @@ func exampleAnySlice() {
 func exampleMustAnySlice() {
 	a := []int{1, 2}
 	p := prmt.New(prmt.MustAnySlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
 }
 
 func exampleEmptySlice() {
-	a := []interface{}{}
+	var a []struct{}
 	p := prmt.New(prmt.MustAnySlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -89,7 +88,7 @@ func exampleInterface() {
 		{Name: "three", Age: 3},
 	}
 	p := prmt.New(PersonSlice(a))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -106,7 +105,7 @@ func factorial(n int) (val int) {
 		return -1
 	}
 	p := prmt.New(emptiesSlice(n))
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		val++
 	}
 	return
@@ -122,13 +121,12 @@ func exampleRepeat() {
 
 	p := prmt.New(prmt.IntSlice(a))
 
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
 
-	// repeate
-	for ok := true; ok; ok = p.Next() {
+	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -152,7 +150,7 @@ func exampleCombinations() {
 	p := prmt.New(prmt.IntSlice(as))
 	for {
 		//fmt.Println(as)
-		for ok := true; ok; ok = p.Next() {
+		for p.Next() {
 			for i, a := range as {
 				ds[i] = vs[a]
 			}
@@ -177,13 +175,4 @@ func nextComb(as []int, n int) (overflow bool) {
 		}
 	}
 	return false
-}
-
-func exampleWalk() {
-	var a = []string{"A", "B", "C"}
-	prmt.Walk(a,
-		func() bool {
-			fmt.Println(a)
-			return true
-		})
 }
