@@ -1,5 +1,42 @@
 Permutation algorithm
 
+The main concept of this algorithm:
+1) use simple operations like swap with elements;
+2) need simple rule that know which of elements need to swap in next step;
+
+As a result of my experiments with permutation of elements,
+I realized that one exchange is not enough. Need another operation.
+It is "flip". It consists of several swaps.
+Example flip 5 elements:
+
+	1 2 3 4 5
+	<-------> - flip
+	5 4 3 2 1
+
+Using only the flip operation, you can get all permutations of elements.
+There is a problem how many elements need to flip at each step.
+For solving this problem I used additional array.
+Size of this array like size array of the elements.
+All elements are integer and initialized zero.
+
+the first element can take values: [0, 1]
+the second element: [0, 1, 2]
+the third element:  [0, 1, 2, 3]
+the 4th element:    [0, 1, 2, 3, 4]
+the n-th element:   [0, 1, ... n]
+...
+
+For first permutation don't need any actions.
+In next step for calculation count of the elements
+which need to flip I used index of element in additional array.
+For every iteration in the begin the index initialized zero.
+Then for element with this index add 1.
+If this element less (index+2) then number of first elements
+which need to flip are (index+2). Otherwise the element with
+this index reset to zero and the index is incrementing.
+Then check next element with the next index.
+If the index equal index of the last element then stop permutation.
+
 +-----+-----------+-------+
 | no. | elements  | flip  |
 +-----+-----------+-------+
