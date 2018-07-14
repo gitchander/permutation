@@ -12,6 +12,7 @@ func main() {
 	exampleStringSlice()
 	exampleAnySlice()
 	exampleMustAnySlice()
+	exampleArray()
 	exampleEmptySlice()
 	exampleInterface()
 	exampleBadFactorial()
@@ -56,6 +57,15 @@ func exampleAnySlice() {
 func exampleMustAnySlice() {
 	a := []int{1, 2}
 	p := prmt.New(prmt.MustAnySlice(a))
+	for p.Next() {
+		fmt.Println(a)
+	}
+	fmt.Println()
+}
+
+func exampleArray() {
+	a := [3]int{1, 2, 3}
+	p := prmt.New(prmt.MustAnySlice(&a))
 	for p.Next() {
 		fmt.Println(a)
 	}
