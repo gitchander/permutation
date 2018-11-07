@@ -31,6 +31,9 @@ func cloneIntSlice(a []int) []int {
 
 func factorial(x int) int {
 	if x < 2 {
+		if x < 0 {
+			panic("negative factorial")
+		}
 		return 1
 	}
 	return x * factorial(x-1)

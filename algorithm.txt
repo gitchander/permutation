@@ -16,8 +16,8 @@ Example flip 5 elements:
 Using only the flip operation, you can get all permutations of elements.
 There is a problem how many elements need to flip at each step.
 For solving this problem I used additional array.
-Size of this array like size array of the elements.
-All elements are integer and initialized zero.
+Size of this array equal size array of the elements minus one.
+All the elements are integer and initialized zero.
 
 the first element can take values: [0, 1]
 the second element: [0, 1, 2]
@@ -145,37 +145,38 @@ Fs(B[n]) -> { B[n+1], fs }
 
 fs - flip size
 
-+----+---------+-----+
-| no.|    B    | fs  |
-+----+---------+-----+
-|  1 | 0 0 0 0 |  -  |
-|  2 | 1 0 0 0 |  2  |
-|  3 | 0 1 0 0 |  3  |
-|  4 | 1 1 0 0 |  2  |
-|  5 | 0 2 0 0 |  3  |
-|  6 | 1 2 0 0 |  2  |
-|  7 | 0 0 1 0 |  4  |
-|  8 | 1 0 1 0 |  2  |
-|  9 | 0 1 1 0 |  3  |
-| 10 | 1 1 1 0 |  2  |
-| 11 | 0 2 1 0 |  3  |
-| 12 | 1 2 1 0 |  2  |
-| 13 | 0 0 2 0 |  4  |
-| 14 | 1 0 2 0 |  2  |
-| 15 | 0 1 2 0 |  3  |
-| 16 | 1 1 2 0 |  2  |
-| 17 | 0 2 2 0 |  3  |
-| 18 | 1 2 2 0 |  2  |
-| 19 | 0 0 3 0 |  4  |
-| 20 | 1 0 3 0 |  2  |
-| 21 | 0 1 3 0 |  3  |
-| 22 | 1 1 3 0 |  2  |
-| 23 | 0 2 3 0 |  3  |
-| 24 | 1 2 3 0 |  2  |
-| 25 | 0 0 0 1 |  3* |
-+----+---------+-----+
++----+-------+-----+
+| no.|   B   | fs  |
++----+-------+-----+
+|  1 | 0 0 0 |  -  |
+|  2 | 1 0 0 |  2  |
+|  3 | 0 1 0 |  3  |
+|  4 | 1 1 0 |  2  |
+|  5 | 0 2 0 |  3  |
+|  6 | 1 2 0 |  2  |
+|  7 | 0 0 1 |  4  |
+|  8 | 1 0 1 |  2  |
+|  9 | 0 1 1 |  3  |
+| 10 | 1 1 1 |  2  |
+| 11 | 0 2 1 |  3  |
+| 12 | 1 2 1 |  2  |
+| 13 | 0 0 2 |  4  |
+| 14 | 1 0 2 |  2  |
+| 15 | 0 1 2 |  3  |
+| 16 | 1 1 2 |  2  |
+| 17 | 0 2 2 |  3  |
+| 18 | 1 2 2 |  2  |
+| 19 | 0 0 3 |  4  |
+| 20 | 1 0 3 |  2  |
+| 21 | 0 1 3 |  3  |
+| 22 | 1 1 3 |  2  |
+| 23 | 0 2 3 |  3  |
+| 24 | 1 2 3 |  2  |
++----+-------+-----+
+| 25 | 0 0 0 | -1  |
++----+-------+-----+
 
-3* - check finish and return to begin state
+The last (-1) check finish and return to begin state
 
 
 Author: Manuilov Yaroslav (Chander)
