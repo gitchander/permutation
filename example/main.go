@@ -145,44 +145,32 @@ func exampleRepeat() {
 func exampleCombinations() {
 
 	var (
-		vs = []string{"1", "2", "3", "4"}
+		//vs = []string{"1", "2", "3", "4", "5"}
+		vs = []string{"A", "B", "C", "D", "E"}
 		n  = len(vs)
 
 		ds = make([]string, 3)
 		k  = len(ds)
 	)
 
-	as := make([]int, k)
-	for i := range as {
-		as[i] = i
-	}
+	c := prmt.NewComb(n, k)
+	for c.Next() {
 
-	p := prmt.New(prmt.IntSlice(as))
-	for {
-		//fmt.Println(as)
-		for p.Next() {
-			for i, a := range as {
-				ds[i] = vs[a]
-			}
-			fmt.Println(ds)
+		indexes := c.Indexes()
+		//fmt.Println(indexes)
+
+		for i, index := range indexes {
+			ds[i] = vs[index]
 		}
-		overflow := nextComb(as, n)
-		if overflow {
-			break
-		}
+		fmt.Println(ds)
+
+		// p := prmt.New(prmt.IntSlice(indexes))
+		// for p.Next() {
+		// 	for i, index := range indexes {
+		// 		ds[i] = vs[index]
+		// 	}
+		// 	fmt.Println(ds)
+		// }
 	}
 	fmt.Println()
-}
-
-func nextComb(as []int, n int) (overflow bool) {
-	if (len(as) == 1) || nextComb(as[1:], n) {
-		d := as[0] + 1
-		if d > (n - len(as)) {
-			return true
-		}
-		for i := range as {
-			as[i] = d + i
-		}
-	}
-	return false
 }
