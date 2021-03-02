@@ -7,11 +7,11 @@ The main concept of this algorithm:
 As a result of my experiments with permutation of elements,
 I realized that one exchange is not enough. Need another operation.
 It is "flip". It consists of several swaps.
-Example flip 5 elements:
+Example flip of n elements:
 
-	1 2 3 4 5
-	<-------> - flip
-	5 4 3 2 1
+	1 2 3 ... n
+	<---------> - flip of n elements
+	n ... 3 2 1
 
 Using only the flip operation, you can get all permutations of elements.
 There is a problem how many elements need to flip at each step.
@@ -110,7 +110,7 @@ If the index equal index of the last element then stop permutation.
 +-----+--------------+-------+
 
 
-Examples flip:
+flip examples:
 
 1 2 3 4
 <->         flip(2)
@@ -182,10 +182,12 @@ The last (-1) check finish and return to begin state
 Author: Manuilov Yaroslav (Chander)
 Email:  jpochander@gmail.com
 
-     _   _
-    / | / 
-    \_| \_
-     /| /|
-    / |/ |
-   /     |
-__/__   _|_
+       +-+  +-+
+      /  | /
+      \  | \
+       +-+  +-+
+       / | / |
+      /  |/  |
+     /   +   |
+    /        |
++--+--+   +--+--+

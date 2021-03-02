@@ -1,4 +1,4 @@
-package permutation
+package combination
 
 // Combination
 // https://en.wikipedia.org/wiki/Combination
@@ -6,16 +6,16 @@ package permutation
 // C(n, k)
 // (n >= k)
 type Combinator struct {
-	n int
-	k int
+	n int // set len
+	k int // subset len
 
-	indexes []int // len(indexes) = k
+	indexes []int // subset indexes
 }
 
 func NewComb(n, k int) *Combinator {
 
 	if k > n {
-		panic("k > n")
+		panic("combination.NewComb: k > n")
 	}
 
 	return &Combinator{
@@ -36,11 +36,13 @@ func (c *Combinator) Next() bool {
 	return false
 }
 
-func (c *Combinator) Indexes() []int {
-	return c.indexes
+func (c *Combinator) WalkSubset(f func(index int)) {
+	for _, index := range c.indexes {
+		f(index)
+	}
 }
 
-// [0, 1, 2, ... n-1]
+// [ 0, 1, 2, ... , (n-2), (n-1) ]
 func serialInts(n int) []int {
 	a := make([]int, n)
 	for i := range a {

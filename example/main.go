@@ -15,9 +15,8 @@ func main() {
 	exampleArray()
 	exampleEmptySlice()
 	exampleInterface()
-	exampleBadFactorial()
+	exampleFactorialByPermutations()
 	exampleRepeat()
-	exampleCombinations()
 }
 
 func exampleIntSlice() {
@@ -104,73 +103,50 @@ func exampleInterface() {
 	fmt.Println()
 }
 
-func exampleBadFactorial() {
+func exampleFactorialByPermutations() {
+	fmt.Println("Factorial by permutations:")
 	for i := 0; i < 10; i++ {
 		fmt.Printf("%d! = %d\n", i, factorial(i))
 	}
+	fmt.Println()
 }
 
-func factorial(n int) (val int) {
+func factorial(n int) int {
 	if n < 0 {
 		return -1
 	}
+	var count int
 	p := prmt.New(emptiesSlice(n))
 	for p.Next() {
-		val++
+		count++
 	}
-	return
+	return count
 }
 
+// slice of empties
 type emptiesSlice int
 
 func (p emptiesSlice) Len() int    { return int(p) }
 func (emptiesSlice) Swap(i, j int) {}
 
 func exampleRepeat() {
+
+	fmt.Println("Repeat permutations:")
+	fmt.Println()
+
 	a := []int{1, 2, 3}
 
 	p := prmt.New(prmt.IntSlice(a))
 
+	fmt.Println("loop 1:")
 	for p.Next() {
 		fmt.Println(a)
 	}
 	fmt.Println()
 
+	fmt.Println("loop 2:")
 	for p.Next() {
 		fmt.Println(a)
-	}
-	fmt.Println()
-}
-
-func exampleCombinations() {
-
-	var (
-		//vs = []string{"1", "2", "3", "4", "5"}
-		vs = []string{"A", "B", "C", "D", "E"}
-		n  = len(vs)
-
-		ds = make([]string, 3)
-		k  = len(ds)
-	)
-
-	c := prmt.NewComb(n, k)
-	for c.Next() {
-
-		indexes := c.Indexes()
-		//fmt.Println(indexes)
-
-		for i, index := range indexes {
-			ds[i] = vs[index]
-		}
-		fmt.Println(ds)
-
-		// p := prmt.New(prmt.IntSlice(indexes))
-		// for p.Next() {
-		// 	for i, index := range indexes {
-		// 		ds[i] = vs[index]
-		// 	}
-		// 	fmt.Println(ds)
-		// }
 	}
 	fmt.Println()
 }
