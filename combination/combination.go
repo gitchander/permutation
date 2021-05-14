@@ -6,13 +6,13 @@ package combination
 // C(n, k)
 // (n >= k)
 type Combinator struct {
-	n int // set len
-	k int // subset len
+	n int // length of set
+	k int // length of subset
 
 	indexes []int // subset indexes
 }
 
-func NewComb(n, k int) *Combinator {
+func New(n, k int) *Combinator {
 
 	if k > n {
 		panic("combination.NewComb: k > n")
@@ -36,9 +36,15 @@ func (c *Combinator) Next() bool {
 	return false
 }
 
-func (c *Combinator) WalkSubset(f func(index int)) {
-	for _, index := range c.indexes {
-		f(index)
+func (c *Combinator) Indexes() []int {
+	return c.indexes
+}
+
+func (c *Combinator) RangeIndexes(f func(subsetIndex, setIndex int) bool) {
+	for subsetIndex, setIndex := range c.indexes {
+		if !f(subsetIndex, setIndex) {
+			return
+		}
 	}
 }
 
