@@ -22,8 +22,8 @@ func exampleCombinations() {
 	)
 
 	var (
-		n = len(set) // length of set
-		k = len(subset)
+		n = len(set)    // length of set
+		k = len(subset) // length of subset
 	)
 
 	c := comb.New(n, k)

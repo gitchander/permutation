@@ -13,11 +13,9 @@ type Combinator struct {
 }
 
 func New(n, k int) *Combinator {
-
 	if k > n {
-		panic("combination.NewComb: k > n")
+		panic("combination.New: k > n")
 	}
-
 	return &Combinator{
 		n: n,
 		k: k,

@@ -113,7 +113,7 @@ func exampleFactorialByPermutations() {
 
 func factorial(n int) int {
 	if n < 0 {
-		return -1
+		panic("negative factorial")
 	}
 	var count int
 	p := prmt.New(emptiesSlice(n))
