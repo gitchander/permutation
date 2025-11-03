@@ -12,25 +12,23 @@ type Combinator struct {
 	indexes []int // subset indexes
 }
 
-func New(n, k int) *Combinator {
+func NewCombinator(n, k int) *Combinator {
 	if k > n {
 		panic("combination.New: k > n")
 	}
 	return &Combinator{
 		n: n,
 		k: k,
+
+		indexes: makeIntsSerial(k),
 	}
 }
 
-func (c *Combinator) Next() bool {
-	if c.indexes == nil {
-		c.indexes = serialInts(c.k)
-		return true
-	}
+func (c *Combinator) NextCombination() bool {
 	if nextComb(c.indexes, c.n) {
 		return true
 	}
-	c.indexes = nil
+	setIntsSerial(c.indexes) // reset initial state
 	return false
 }
 
@@ -46,16 +44,20 @@ func (c *Combinator) RangeIndexes(f func(subsetIndex, setIndex int) bool) {
 	}
 }
 
-// [ 0, 1, 2, ... , (n-2), (n-1) ]
-func serialInts(n int) []int {
-	a := make([]int, n)
+func setIntsSerial(a []int) {
 	for i := range a {
 		a[i] = i
 	}
+}
+
+// [ 0, 1, 2, ... , (n-2), (n-1) ]
+func makeIntsSerial(n int) []int {
+	a := make([]int, n)
+	setIntsSerial(a)
 	return a
 }
 
-func nextComb(indexes []int, n int) (ok bool) {
+func nextComb(indexes []int, n int) bool {
 
 	if len(indexes) == 0 {
 		return false

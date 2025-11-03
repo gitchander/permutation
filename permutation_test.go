@@ -45,8 +45,8 @@ func testIntSlice(t *testing.T, as []int) {
 
 	var vs [][]int
 
-	p := New(IntSlice(as))
-	for p.Next() {
+	p := NewPermutatorForSlice(as)
+	for ok := true; ok; ok = p.NextPermutation() {
 		for j, v := range vs {
 			if equalIntSlices(as, v) {
 				t.Fatalf("v(%d) == v(%d)", j, i)
@@ -57,7 +57,7 @@ func testIntSlice(t *testing.T, as []int) {
 	}
 
 	if n := factorial(len(as)); i != n {
-		t.Logf("factorial invalid value: %d != %d", i, n)
+		t.Fatalf("factorial invalid value: %d != %d", i, n)
 	}
 }
 

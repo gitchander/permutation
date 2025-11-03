@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	prmt "github.com/gitchander/permutation"
 )
@@ -10,8 +9,7 @@ import (
 func main() {
 	exampleIntSlice()
 	exampleStringSlice()
-	exampleAnySlice()
-	exampleMustAnySlice()
+	exampleReflectElements()
 	exampleArray()
 	exampleEmptySlice()
 	exampleInterface()
@@ -21,8 +19,8 @@ func main() {
 
 func exampleIntSlice() {
 	a := []int{1, 2, 3}
-	p := prmt.New(prmt.IntSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a)
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -30,42 +28,34 @@ func exampleIntSlice() {
 
 func exampleStringSlice() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := prmt.New(prmt.StringSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a)
+	p.WalkPermutations(func() bool {
 		fmt.Println(a)
-	}
+		return true
+	})
 	fmt.Println()
 }
 
-func exampleAnySlice() {
-
+func exampleReflectElements() {
 	a := []interface{}{-1, "control", 9.3}
-
-	data, err := prmt.NewAnySlice(a)
+	v, err := prmt.ReflectElements(a)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-
-	p := prmt.New(data)
-	for p.Next() {
+	p := prmt.NewPermutator(v)
+	for {
 		fmt.Println(a)
-	}
-	fmt.Println()
-}
-
-func exampleMustAnySlice() {
-	a := []int{1, 2}
-	p := prmt.New(prmt.MustAnySlice(a))
-	for p.Next() {
-		fmt.Println(a)
+		if !(p.NextPermutation()) {
+			break
+		}
 	}
 	fmt.Println()
 }
 
 func exampleArray() {
 	a := [3]int{1, 2, 3}
-	p := prmt.New(prmt.MustAnySlice(&a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a[:])
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -73,12 +63,14 @@ func exampleArray() {
 
 func exampleEmptySlice() {
 	var a []struct{}
-	p := prmt.New(prmt.MustAnySlice(a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a)
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 	fmt.Println()
 }
+
+//------------------------------------------------------------------------------
 
 type Person struct {
 	Name string
@@ -96,12 +88,14 @@ func exampleInterface() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := prmt.New(PersonSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutator(PersonSlice(a))
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 	fmt.Println()
 }
+
+//------------------------------------------------------------------------------
 
 func exampleFactorialByPermutations() {
 	fmt.Println("Factorial by permutations:")
@@ -116,37 +110,25 @@ func factorial(n int) int {
 		panic("negative factorial")
 	}
 	var count int
-	p := prmt.New(emptiesSlice(n))
-	for p.Next() {
+	p := prmt.NewPermutator(prmt.OnlyLen(n))
+	for ok := true; ok; ok = p.NextPermutation() {
 		count++
 	}
 	return count
 }
 
-// slice of empties
-type emptiesSlice int
-
-func (p emptiesSlice) Len() int    { return int(p) }
-func (emptiesSlice) Swap(i, j int) {}
+//------------------------------------------------------------------------------
 
 func exampleRepeat() {
-
 	fmt.Println("Repeat permutations:")
 	fmt.Println()
-
 	a := []int{1, 2, 3}
-
-	p := prmt.New(prmt.IntSlice(a))
-
-	fmt.Println("loop 1:")
-	for p.Next() {
-		fmt.Println(a)
+	p := prmt.NewPermutatorForSlice(a)
+	for i := 0; i < 3; i++ {
+		fmt.Printf("loop %d:\n", i+1)
+		for ok := true; ok; ok = p.NextPermutation() {
+			fmt.Println(a)
+		}
+		fmt.Println()
 	}
-	fmt.Println()
-
-	fmt.Println("loop 2:")
-	for p.Next() {
-		fmt.Println(a)
-	}
-	fmt.Println()
 }

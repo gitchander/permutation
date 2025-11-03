@@ -20,8 +20,8 @@ import (
 
 func main() {
 	a := []int{1, 2, 3}
-	p := prmt.New(prmt.IntSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a)
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 }
@@ -36,7 +36,7 @@ result:
 [3 2 1]
 ```
 
-#### permutations of string slice:
+#### permutations of string slice with WalkPermutations:
 ```go
 package main
 
@@ -48,10 +48,11 @@ import (
 
 func main() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := prmt.New(prmt.StringSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutatorForSlice(a)
+	p.WalkPermutations(func() bool {
 		fmt.Println(a)
-	}
+		return true
+	})
 }
 ```
 result:
@@ -64,27 +65,20 @@ result:
 [gamma beta alpha]
 ```
 
-#### permutation use of AnySlice:
+#### permutation use of ReflectElements:
 ```go
-a := []interface{}{-1, "control", 9.3}
-
-data, err := prmt.NewAnySlice(a)
-if err != nil {
-	log.Fatal(err)
-}
-
-p := prmt.New(data)
-for p.Next() {
-	fmt.Println(a)
-}
-```
-or use MustAnySlice (panic if error):
-```go
-a := []int{1, 2}
-p := prmt.New(prmt.MustAnySlice(a))
-for p.Next() {
-	fmt.Println(a)
-}
+	a := []interface{}{-1, "control", 9.3}
+	v, err := prmt.ReflectElements(a)
+	if err != nil {
+		panic(err)
+	}
+	p := prmt.NewPermutator(v)
+	for {
+		fmt.Println(a)
+		if !(p.NextPermutation()) {
+			break
+		}
+	}
 ```
 
 #### usage permutation.Interface
@@ -113,8 +107,8 @@ func main() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := prmt.New(PersonSlice(a))
-	for p.Next() {
+	p := prmt.NewPermutator(PersonSlice(a))
+	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
 }

@@ -26,9 +26,8 @@ func exampleCombinations() {
 		k = len(subset) // length of subset
 	)
 
-	c := comb.New(n, k)
-
-	for c.Next() {
+	c := comb.NewCombinator(n, k)
+	for ok := true; ok; ok = c.NextCombination() {
 
 		// fill subset by indexes
 		for subsetIndex, setIndex := range c.Indexes() {
@@ -54,17 +53,18 @@ func examplePermutationOfCombinations() {
 		k = len(subset) // length of subset
 	)
 
-	c := comb.New(n, k)
-	p := prmt.New(prmt.StringSlice(subset))
-
-	for c.Next() {
+	var (
+		c = comb.NewCombinator(n, k)
+		p = prmt.NewPermutatorForSlice(subset)
+	)
+	for ok := true; ok; ok = c.NextCombination() {
 
 		// fill subset by indexes
 		for subsetIndex, setIndex := range c.Indexes() {
 			subset[subsetIndex] = set[setIndex]
 		}
 
-		for p.Next() {
+		for ok := true; ok; ok = p.NextPermutation() {
 			fmt.Println(subset)
 		}
 	}
