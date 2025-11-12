@@ -55,7 +55,7 @@ func examplePermutationOfCombinations() {
 
 	var (
 		c = comb.NewCombinator(n, k)
-		p = prmt.NewPermutatorForSlice(subset)
+		p = prmt.NewSlicePermutator(subset)
 	)
 	for ok := true; ok; ok = c.NextCombination() {
 

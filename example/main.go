@@ -19,7 +19,7 @@ func main() {
 
 func exampleIntSlice() {
 	a := []int{1, 2, 3}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
@@ -28,7 +28,7 @@ func exampleIntSlice() {
 
 func exampleStringSlice() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	p.WalkPermutations(func() bool {
 		fmt.Println(a)
 		return true
@@ -54,7 +54,7 @@ func exampleReflectElements() {
 
 func exampleArray() {
 	a := [3]int{1, 2, 3}
-	p := prmt.NewPermutatorForSlice(a[:])
+	p := prmt.NewSlicePermutator(a[:])
 	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
@@ -63,7 +63,7 @@ func exampleArray() {
 
 func exampleEmptySlice() {
 	var a []struct{}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
@@ -100,17 +100,24 @@ func exampleInterface() {
 func exampleFactorialByPermutations() {
 	fmt.Println("Factorial by permutations:")
 	for i := 0; i < 10; i++ {
-		fmt.Printf("%d! = %d\n", i, factorial(i))
+		fmt.Printf("%d! = %d\n", i, factorialByPermutations(i))
 	}
 	fmt.Println()
 }
 
-func factorial(n int) int {
+type onlyLen int
+
+func (x onlyLen) Len() int    { return int(x) }
+func (onlyLen) Swap(i, j int) {}
+
+var _ prmt.Interface = onlyLen(0)
+
+func factorialByPermutations(n int) int {
 	if n < 0 {
 		panic("negative factorial")
 	}
 	var count int
-	p := prmt.NewPermutator(prmt.OnlyLen(n))
+	p := prmt.NewPermutator(onlyLen(n))
 	for ok := true; ok; ok = p.NextPermutation() {
 		count++
 	}
@@ -123,7 +130,7 @@ func exampleRepeat() {
 	fmt.Println("Repeat permutations:")
 	fmt.Println()
 	a := []int{1, 2, 3}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	for i := 0; i < 3; i++ {
 		fmt.Printf("loop %d:\n", i+1)
 		for ok := true; ok; ok = p.NextPermutation() {

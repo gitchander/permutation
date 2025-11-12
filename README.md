@@ -20,7 +20,7 @@ import (
 
 func main() {
 	a := []int{1, 2, 3}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	for ok := true; ok; ok = p.NextPermutation() {
 		fmt.Println(a)
 	}
@@ -48,7 +48,7 @@ import (
 
 func main() {
 	a := []string{"alpha", "beta", "gamma"}
-	p := prmt.NewPermutatorForSlice(a)
+	p := prmt.NewSlicePermutator(a)
 	p.WalkPermutations(func() bool {
 		fmt.Println(a)
 		return true

@@ -1,5 +1,12 @@
 package permutation
 
+type Interface interface {
+	// Len is the number of elements in the collection.
+	Len() int
+	// Swap swaps the elements with indexes i and j.
+	Swap(i, j int)
+}
+
 type Permutator struct {
 	v Interface
 	b []int
@@ -12,7 +19,7 @@ func NewPermutator(v Interface) *Permutator {
 	}
 }
 
-func NewPermutatorForSlice[S ~[]E, E any](x S) *Permutator {
+func NewSlicePermutator[S ~[]E, E any](x S) *Permutator {
 	return NewPermutator(anySlice[E](x))
 }
 
@@ -45,4 +52,13 @@ func calcFlipSize(b []int) (int, bool) {
 		b[i] = 0
 	}
 	return 0, false
+}
+
+// flip is a function which flips first n elements in the slice (v)
+func flip(v Interface, n int) {
+	i, j := 0, n-1
+	for i < j {
+		v.Swap(i, j)
+		i, j = i+1, j-1
+	}
 }
