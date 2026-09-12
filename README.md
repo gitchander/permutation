@@ -1,6 +1,8 @@
 # permutation
 Simple permutation package for golang
 
+[Chander's Permutation Algorithm](algorithm.md)
+
 ## Install
 ```bash
 go get github.com/gitchander/permutation
@@ -20,8 +22,7 @@ import (
 
 func main() {
 	a := []int{1, 2, 3}
-	p := prmt.NewSlicePermutator(a)
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.SlicePermutations(a) {
 		fmt.Println(a)
 	}
 }
@@ -72,12 +73,8 @@ result:
 	if err != nil {
 		panic(err)
 	}
-	p := prmt.NewPermutator(v)
-	for {
+	for range prmt.IPermutations(v) {
 		fmt.Println(a)
-		if !(p.NextPermutation()) {
-			break
-		}
 	}
 ```
 
@@ -107,8 +104,7 @@ func main() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := prmt.NewPermutator(PersonSlice(a))
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.IPermutations(PersonSlice(a)) {
 		fmt.Println(a)
 	}
 }

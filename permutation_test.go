@@ -46,7 +46,7 @@ func testIntSlice(t *testing.T, as []int) {
 	var vs [][]int
 
 	p := NewSlicePermutator(as)
-	for ok := true; ok; ok = p.NextPermutation() {
+	for ok := true; ok; ok = p.next() {
 		for j, v := range vs {
 			if equalIntSlices(as, v) {
 				t.Fatalf("v(%d) == v(%d)", j, i)

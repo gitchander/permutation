@@ -1,41 +1,44 @@
-Permutation algorithm
+# Permutation Algorithm
 
-The main concept of this algorithm:
-1) use simple operations like swap with elements;
-2) need simple rule that know which of elements need to swap in next step;
+The main concepts of this algorithm:
 
-As a result of my experiments with permutation of elements,
-I realized that one exchange is not enough. Need another operation.
-It is "flip". It consists of several swaps.
-Example flip of n elements:
+1. Using simple operations like swapping elements;
+2. Having a simple rule to know which elements need to be swapped at the next step.
+
+As a result of my experiments with element permutations, I realized that a single exchange is not enough. Another operation is needed: the "flip." It consists of multiple swaps.
+Example flip of $n$ elements:
+
+```text
 
 	1 2 3 ... n
 	<---------> - flip of n elements
 	n ... 3 2 1
 
-Using only the flip operation, you can get all permutations of elements.
-There is a problem how many elements need to flip at each step.
-For solving this problem I used additional array.
-Size of this array equal size array of the elements minus one.
-All the elements are integer and initialized zero.
 
-the first element can take values: [0, 1]
-the second element: [0, 1, 2]
-the third element:  [0, 1, 2, 3]
-the 4th element:    [0, 1, 2, 3, 4]
-the n-th element:   [0, 1, ... n]
+```
+
+Using only the flip operation, you can generate all permutations of elements.
+However, a challenge arises: determining how many elements need to be flipped at each step.
+To solve this problem, I used an auxiliary array.
+The size of this array equals the size of the elements array.
+All its elements are integers and initialized to zero.
+
+* The first element can take values: `[0]`
+* The second element: `[0, 1]`
+* The third element: `[0, 1, 2]`
+* The 4th element: `[0, 1, 2, 3]`
+* The $n$-th element: `[0, 1, ... n-1]`
 ...
 
-For first permutation don't need any actions.
-In next step for calculation count of the elements
-which need to flip I used index of element in additional array.
-For every iteration in the begin the index initialized zero.
-Then for element with this index add 1.
-If this element less (index+2) then number of first elements
-which need to flip are (index+2). Otherwise the element with
-this index reset to zero and the index is incrementing.
-Then check next element with the next index.
-If the index equal index of the last element then stop permutation.
+No actions are needed for the first permutation.
+For subsequent steps, to calculate the count of elements that need to be flipped, I use the index of the element in the auxiliary array.
+For every iteration, the index is initially set to zero.
+Then, `1` is added to the element at this index.
+If this element is less than `index + 1`, then the number of first elements that need to be flipped is `index + 1`. Otherwise, the element at this index is reset to zero, and the index is incremented.
+Next, check the element with the new index.
+If the index equals the index of the last element, the permutation stops.
+
+```text
 
 +-----+-----------+-------+
 | no. | elements  | flip  |
@@ -109,7 +112,6 @@ If the index equal index of the last element then stop permutation.
 |     |              |       |
 +-----+--------------+-------+
 
-
 flip examples:
 
 1 2 3 4
@@ -145,49 +147,54 @@ Fs(B[n]) -> { B[n+1], fs }
 
 fs - flip size
 
-+----+-------+-----+
-| no.|   B   | fs  |
-+----+-------+-----+
-|  1 | 0 0 0 |  -  |
-|  2 | 1 0 0 |  2  |
-|  3 | 0 1 0 |  3  |
-|  4 | 1 1 0 |  2  |
-|  5 | 0 2 0 |  3  |
-|  6 | 1 2 0 |  2  |
-|  7 | 0 0 1 |  4  |
-|  8 | 1 0 1 |  2  |
-|  9 | 0 1 1 |  3  |
-| 10 | 1 1 1 |  2  |
-| 11 | 0 2 1 |  3  |
-| 12 | 1 2 1 |  2  |
-| 13 | 0 0 2 |  4  |
-| 14 | 1 0 2 |  2  |
-| 15 | 0 1 2 |  3  |
-| 16 | 1 1 2 |  2  |
-| 17 | 0 2 2 |  3  |
-| 18 | 1 2 2 |  2  |
-| 19 | 0 0 3 |  4  |
-| 20 | 1 0 3 |  2  |
-| 21 | 0 1 3 |  3  |
-| 22 | 1 1 3 |  2  |
-| 23 | 0 2 3 |  3  |
-| 24 | 1 2 3 |  2  |
-+----+-------+-----+
-| 25 | 0 0 0 | -1  |
-+----+-------+-----+
++----+---------+-----+
+| no.|    B    | fs  |
++----+---------+-----+
+|  1 | 0 0 0 0 |  -  |
+|  2 | 0 1 0 0 |  2  |
+|  3 | 0 0 1 0 |  3  |
+|  4 | 0 1 1 0 |  2  |
+|  5 | 0 0 2 0 |  3  |
+|  6 | 0 1 2 0 |  2  |
+|  7 | 0 0 0 1 |  4  |
+|  8 | 0 1 0 1 |  2  |
+|  9 | 0 0 1 1 |  3  |
+| 10 | 0 1 1 1 |  2  |
+| 11 | 0 0 2 1 |  3  |
+| 12 | 0 1 2 1 |  2  |
+| 13 | 0 0 0 2 |  4  |
+| 14 | 0 1 0 2 |  2  |
+| 15 | 0 0 1 2 |  3  |
+| 16 | 0 1 1 2 |  2  |
+| 17 | 0 0 2 2 |  3  |
+| 18 | 0 1 2 2 |  2  |
+| 19 | 0 0 0 3 |  4  |
+| 20 | 0 1 0 3 |  2  |
+| 21 | 0 0 1 3 |  3  |
+| 22 | 0 1 1 3 |  2  |
+| 23 | 0 0 2 3 |  3  |
+| 24 | 0 1 2 3 |  2  |
++----+---------+-----+
+| 25 | 0 0 0 0 | 4*  |
++----+---------+-----+
 
-The last (-1) check finish and return to begin state
+```
 
+The last flip (4*) returns the array to the initial state.
 
 Author: Manuilov Yaroslav (Chander)
 Email:  jpochander@gmail.com
 
-       +-+  +-+
+```text
+
+       ---  ---
       /  | /
       \  | \
-       +-+  +-+
+       ---  ---
        / | / |
       /  |/  |
-     /   +   |
+     /       |
     /        |
-+--+--+   +--+--+
+-------   -------
+
+```

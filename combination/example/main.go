@@ -64,7 +64,7 @@ func examplePermutationOfCombinations() {
 			subset[subsetIndex] = set[setIndex]
 		}
 
-		for ok := true; ok; ok = p.NextPermutation() {
+		for range p.Permutations() {
 			fmt.Println(subset)
 		}
 	}

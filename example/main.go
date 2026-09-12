@@ -15,12 +15,12 @@ func main() {
 	exampleInterface()
 	exampleFactorialByPermutations()
 	exampleRepeat()
+	exampleIter()
 }
 
 func exampleIntSlice() {
 	a := []int{1, 2, 3}
-	p := prmt.NewSlicePermutator(a)
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.SlicePermutations(a) {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -42,20 +42,15 @@ func exampleReflectElements() {
 	if err != nil {
 		panic(err)
 	}
-	p := prmt.NewPermutator(v)
-	for {
+	for range prmt.IPermutations(v) {
 		fmt.Println(a)
-		if !(p.NextPermutation()) {
-			break
-		}
 	}
 	fmt.Println()
 }
 
 func exampleArray() {
 	a := [3]int{1, 2, 3}
-	p := prmt.NewSlicePermutator(a[:])
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.SlicePermutations(a[:]) {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -63,8 +58,7 @@ func exampleArray() {
 
 func exampleEmptySlice() {
 	var a []struct{}
-	p := prmt.NewSlicePermutator(a)
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.SlicePermutations(a) {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -88,8 +82,7 @@ func exampleInterface() {
 		{Name: "two", Age: 2},
 		{Name: "three", Age: 3},
 	}
-	p := prmt.NewPermutator(PersonSlice(a))
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.IPermutations(PersonSlice(a)) {
 		fmt.Println(a)
 	}
 	fmt.Println()
@@ -117,8 +110,7 @@ func factorialByPermutations(n int) int {
 		panic("negative factorial")
 	}
 	var count int
-	p := prmt.NewPermutator(onlyLen(n))
-	for ok := true; ok; ok = p.NextPermutation() {
+	for range prmt.IPermutations(onlyLen(n)) {
 		count++
 	}
 	return count
@@ -131,11 +123,24 @@ func exampleRepeat() {
 	fmt.Println()
 	a := []int{1, 2, 3}
 	p := prmt.NewSlicePermutator(a)
+
 	for i := 0; i < 3; i++ {
 		fmt.Printf("loop %d:\n", i+1)
-		for ok := true; ok; ok = p.NextPermutation() {
+		for range p.Permutations() {
 			fmt.Println(a)
 		}
 		fmt.Println()
+	}
+}
+
+//------------------------------------------------------------------------------
+
+func exampleIter() {
+	fmt.Println("Iter permutations:")
+	fmt.Println()
+
+	a := []int{1, 2, 3}
+	for range prmt.SlicePermutations(a) {
+		fmt.Println(a)
 	}
 }
